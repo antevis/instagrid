@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Insta grid</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+    <div id="upload-container">
+      <label for="files" id="custom-file-upload">Upload</label>
+      <input type="file" id="files" name="files[]" multiple />
+      <div id="add-rows-container">
+        <label id="add-label" for="rows">Add</label>
+        <input type="text" id="rows-input" name="rows">
+        <label id="add-rows-button">rows</label>
+      </div>
+      <label id="download">Download</label>
+    </div>
+    <div id="container">
+      <div id="feed"></div>
+      <div id="stock"></div>
+    </div>
+    <script src="js/html2canvas.js"></script>
+    <script src="js/FileSaver.js"></script>
+    <script src="js/script.js"></script>
+  </body>
+</html>
