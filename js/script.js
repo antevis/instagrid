@@ -1,40 +1,70 @@
-let doc = window.document;
+const doc = window.document;
 
-let container = doc.getElementById('container');
-let stock = doc.getElementById('stock');
-let feed = doc.getElementById('feed');
-let rowInput = doc.getElementById('rows-input');
+const container = doc.getElementById('container');
+const stock = doc.getElementById('stock');
+const feed = doc.getElementById('feed');
+const rowInput = doc.getElementById('rows-input');
 
-let processUrl = f => {
-  let reader = new FileReader();
+const adjustTiles = () => {
+  const feedWidth = Math.min(feed.scrollWidth, feed.offsetWidth);
+  tileSize = Math.floor(feedWidth / 3) - 3;
+  for (tile_cont of [...feed.childNodes]) {
+    tile_cont.style.width = `${tileSize}px`;
+    tile_cont.style.height = `${tileSize}px`;
+
+    for (tile of [...tile_cont.childNodes]) {
+      setTileParams(tile_cont, tile);
+    }
+  }
+}
+
+const fitTiles = e => {
+
+
+  if (feed.childElementCount > 0) {
+    container.style.height = `${window.innerHeight - 150}px`;
+
+    // This ridiculousness due to the browsers' scrollbar width ambiguity.
+    // Basically doing the same thing twice.
+    // Surely may be optimised but screw it.
+    adjustTiles();
+
+    if (feed.offsetWidth != feed.scrollWidth) {
+      adjustTiles();
+    }
+  }
+}
+
+const processUrl = f => {
+  const reader = new FileReader();
   reader.readAsDataURL(f);
 
   reader.onload = rlev => {
 
-    let img = new Image();
+    const img = new Image();
     img.src = rlev.target.result;
 
     img.onload = () => {
-      let srcHeight = img.height;
-      let srcWidth = img.width;
-      let scaleFactor = 150 / Math.min(srcHeight, srcWidth);
+      const srcHeight = img.height;
+      const srcWidth = img.width;
+      const scaleFactor = 150 / Math.min(srcHeight, srcWidth);
 
-      let elem = document.createElement('canvas');
+      const elem = document.createElement('canvas');
       elem.width = srcWidth * scaleFactor;
       elem.height = srcHeight * scaleFactor;
-      let ctx = elem.getContext('2d');
+      const ctx = elem.getContext('2d');
       ctx.drawImage(img, 0, 0, elem.width, elem.height);
 
-      let url = ctx.canvas.toDataURL(img);
+      const url = ctx.canvas.toDataURL(img);
 
-      let stockTileContainer = doc.createElement('div');
+      const stockTileContainer = doc.createElement('div');
       stockTileContainer.style.width = '100px';
       stockTileContainer.style.height = '100px';
       stockTileContainer.classList.add('tile-container');
 
       addTileContainerEvents(stockTileContainer);
 
-      let tile = doc.createElement('div');
+      const tile = doc.createElement('div');
       tile.classList.add('tile');
       tile.style.width = '98px';
       tile.style.height = '98px';
@@ -51,13 +81,9 @@ let processUrl = f => {
   }
 }
 
-let feedContainerCount = stockCount => {
-  return Math.ceil(stockCount/3)*3;
-}
-
-let setTileParams = (parent, child) => {
-  let parent_width = parent.offsetWidth;
-  let parent_height = parent.offsetHeight;
+const setTileParams = (parent, child) => {
+  const parent_width = parent.offsetWidth;
+  const parent_height = parent.offsetHeight;
 
   if (parent_width <= 100) {
     child.style.width = `${parent_width-2}px`
@@ -70,34 +96,34 @@ let setTileParams = (parent, child) => {
   }
 }
 
-let popChildren = parent => {
+const popChildren = parent => {
   while (parent.firstChild)
     parent.removeChild(parent.firstChild);
 }
 
-let addTileContainerEvents = tileContainer => {
+const addTileContainerEvents = tileContainer => {
   tileContainer.addEventListener('dragover', dragOver);
   tileContainer.addEventListener('dragenter', dragEnter);
   tileContainer.addEventListener('dragleave', dragLeave);
   tileContainer.addEventListener('drop', dragDrop);
 }
 
-let handleFileSelect = e => {
+const handleFileSelect = e => {
 
   container.style.display = 'flex';
   container.style.height = `${window.innerHeight - 150}px`;
 
-  let files = [...e.target.files].filter( s => s.type.includes("image") );
+  const files = [...e.target.files].filter( s => s.type.includes("image") );
 
   for (file of files) {
     processUrl(file);
   }
 }
 
-let randomColor = () => {
-  let red = parseInt(Math.random()*255);
-  let green = parseInt(Math.random()*255);
-  let blue = parseInt(Math.random()*255);
+const randomColor = () => {
+  const red = parseInt(Math.random()*255);
+  const green = parseInt(Math.random()*255);
+  const blue = parseInt(Math.random()*255);
 
   return `rgb(${red},${green},${blue})`
 }
@@ -105,35 +131,35 @@ let randomColor = () => {
 var ego = null;
 
 // Tiles events
-let dragStart = e => {
+const dragStart = e => {
   e.dataTransfer.setData('Text', '');
   ego = e.currentTarget;
   setTimeout(() => ego.classList.add('invisible'), 0);
 }
 
-let dragEnd = e => {
+const dragEnd = e => {
   e.currentTarget.classList.remove('invisible');
 }
 
 // Tile-container events
-let dragOver = e => {
+const dragOver = e => {
   e.preventDefault();
 }
 
-let dragEnter = e => {
+const dragEnter = e => {
   e.preventDefault();
   e.currentTarget.classList.add('hovered');
 }
 
-let dragLeave = e => {
+const dragLeave = e => {
   e.currentTarget.classList.remove('hovered');
 }
 
-let dragDrop = e => {
+const dragDrop = e => {
   if (e.currentTarget.childElementCount != 0) { // need to switch parents
 
-    let ego_parent = ego.parentNode;
-    let existing_child = e.currentTarget.childNodes[0];
+    const ego_parent = ego.parentNode;
+    const existing_child = e.currentTarget.childNodes[0];
     ego_parent.appendChild(existing_child);
 
     setTileParams(ego_parent, existing_child);
@@ -146,43 +172,34 @@ let dragDrop = e => {
   e.currentTarget.classList.remove('hovered');
 }
 
-let init = () => {
-
+const init = () => {
+  window.addEventListener('resize', fitTiles);
   doc.getElementById('files').addEventListener('change', handleFileSelect, false);
   doc.getElementById('add-rows-button').addEventListener('click', () => {
 
-    if (stock.childElementCount > 0) {
+    const nRows = parseInt(rowInput.value);
+    if (nRows) {
+      const feedWidth = Math.min(feed.scrollWidth, feed.offsetWidth);
+      const tileSize = feedWidth/3 - 3;
 
-      let nRows = parseInt(rowInput.value);
-      if (nRows) {
-        for (var i = 0; i < nRows*3; i++) {
-          let feedTileContainer = doc.createElement('div');
-          feedTileContainer.style.width = '148px';
-          feedTileContainer.style.height = '148px';
-          feedTileContainer.classList.add('tile-container');
+      for (var i = 0; i < nRows*3; i++) {
+        const feedTileContainer = doc.createElement('div');
+        feedTileContainer.style.width = `${tileSize}px`; // '148px';
+        feedTileContainer.style.height = `${tileSize}px`; // '148px';
+        feedTileContainer.classList.add('tile-container');
 
-          addTileContainerEvents(feedTileContainer);
-          feed.insertBefore(feedTileContainer, feed.firstElementChild);
-        }
-
-        if (feed.offsetWidth <= 450) {
-          let feedScrollBarWidth = feed.offsetWidth - feed.scrollWidth;
-          feed.style.width = `${feed.offsetWidth + feedScrollBarWidth}px`;
-        }
+        addTileContainerEvents(feedTileContainer);
+        feed.insertBefore(feedTileContainer, feed.firstElementChild);
       }
-    } else {
-      alert('Nowhere to add.');
     }
   });
-  doc.getElementById('download').addEventListener('click', () => {
 
-    let feed = doc.getElementById('feed');
+  doc.getElementById('download').addEventListener('click', () => {
 
     if (feed.childElementCount > 0) {
 
-      let h_full = feed.scrollHeight;
-
-      let h_visible = feed.offsetHeight;
+      const h_full = feed.scrollHeight;
+      const h_visible = feed.offsetHeight;
 
       // Showing full height of the feed to create full canvas.
       feed.style.overflow = 'unset';
