@@ -1,3 +1,6 @@
+// Largely based on the YouTube tutorial by Brad Traversy.
+// https://youtu.be/C22hQKE_32c
+
 const doc = window.document;
 
 const container = doc.getElementById('container');
