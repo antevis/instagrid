@@ -92,23 +92,6 @@ let handleFileSelect = e => {
   for (file of files) {
     processUrl(file);
   }
-
-  // // Adding feed tiles (multiples of 3)
-  // for (var i = 0; i < feedContainerCount(files.length); i++) {
-  //   let feedTileContainer = doc.createElement('div');
-  //   feedTileContainer.style.width = '148px';
-  //   feedTileContainer.style.height = '148px';
-  //   feedTileContainer.classList.add('tile-container');
-  //
-  //   addTileContainerEvents(feedTileContainer);
-  //   feed.insertBefore(feedTileContainer, feed.firstElementChild);
-  // }
-  //
-  // if (feed.offsetWidth <= 450) {
-  //   let feedScrollBarWidth = feed.offsetWidth - feed.scrollWidth;
-  //   feed.style.width = `${feed.offsetWidth + feedScrollBarWidth}px`;
-  // }
-
 }
 
 let randomColor = () => {
