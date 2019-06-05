@@ -180,21 +180,24 @@ const init = () => {
   doc.getElementById('files').addEventListener('change', handleFileSelect, false);
   doc.getElementById('add-rows-button').addEventListener('click', () => {
 
-    const nRows = parseInt(rowInput.value);
-    if (nRows) {
-      const feedWidth = Math.min(feed.scrollWidth, feed.offsetWidth);
-      const tileSize = feedWidth/3 - 3;
+    if (stock.childElementCount > 0){
+      const nRows = parseInt(rowInput.value);
+      if (nRows) {
+        const feedWidth = Math.min(feed.scrollWidth, feed.offsetWidth);
+        const tileSize = feedWidth/3 - 3;
 
-      for (var i = 0; i < nRows*3; i++) {
-        const feedTileContainer = doc.createElement('div');
-        feedTileContainer.style.width = `${tileSize}px`; // '148px';
-        feedTileContainer.style.height = `${tileSize}px`; // '148px';
-        feedTileContainer.classList.add('tile-container');
+        for (var i = 0; i < nRows*3; i++) {
+          const feedTileContainer = doc.createElement('div');
+          feedTileContainer.style.width = `${tileSize}px`; // '148px';
+          feedTileContainer.style.height = `${tileSize}px`; // '148px';
+          feedTileContainer.classList.add('tile-container');
 
-        addTileContainerEvents(feedTileContainer);
-        feed.insertBefore(feedTileContainer, feed.firstElementChild);
+          addTileContainerEvents(feedTileContainer);
+          feed.insertBefore(feedTileContainer, feed.firstElementChild);
+        }
       }
     }
+
   });
 
   doc.getElementById('download').addEventListener('click', () => {
