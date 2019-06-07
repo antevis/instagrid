@@ -161,11 +161,12 @@ const dragLeave = e => {
 const dragDrop = e => {
   if (e.currentTarget.childElementCount != 0) { // need to switch parents
 
-    const ego_parent = ego.parentNode;
-    const existing_child = e.currentTarget.childNodes[0];
-    ego_parent.appendChild(existing_child);
+    const egoParent = ego.parentNode;
 
-    setTileParams(ego_parent, existing_child);
+    const existingChild = e.currentTarget.childNodes[0];
+    egoParent.appendChild(existingChild);
+
+    setTileParams(egoParent, existingChild);
   }
 
   e.currentTarget.appendChild(ego);

@@ -104,6 +104,8 @@ input[type="file"] {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+
+  /* transition: all 1s ease; */
 }
 
 .hovered {
@@ -114,3 +116,7 @@ input[type="file"] {
 .invisible {
   display: none;
 }
+
+/* .dd-transition {
+  transition: all 0.3s ease;
+} */
